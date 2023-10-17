@@ -1,0 +1,40 @@
+@一瞬キラ
+--track0:ﾌﾚｰﾑ1,1,100,1,1
+--track1:ﾌﾚｰﾑ2,1,100,1,1
+--track2:ﾌﾚｰﾑ3,1,100,1,1
+--dialog:色1/col,color1=0x0000ff;色2/col,color2=0xff0000;色3/col,color3=0xffff00;
+
+if(obj.frame <= obj.track0-1) then
+    obj.effect("単色化","強さ",100.0,"輝度を保持する",0,"color",color1) -- 色1に単色化
+elseif(obj.frame <= obj.track0 + obj.track1 - 1) then
+    obj.effect("単色化","強さ",100.0,"輝度を保持する",0,"color",color2) -- 色2に単色化
+elseif(obj.frame <= obj.track0 + obj.track1 + obj.track2 - 1) then
+    obj.effect("単色化","強さ",100.0,"輝度を保持する",0,"color",color3) -- 色3に単色化
+end
+
+@一瞬ストロボ
+--track0:間隔ﾌﾚｰﾑ,1,100,1,1
+--track1:回数,1,100,1,1
+--dialog:入場/chk,enter=1;退場/chk,exit=1;
+
+local originalAlpha = obj.alpha
+
+-- 入場
+-- 指定した回数*2フレームの間だけ指定した間隔で点滅する
+if (obj.frame <= (obj.track0 * obj.track1 * 2) - 1) then
+    -- 点滅処理
+    if (math.floor(obj.frame / obj.track0) % 2 == 0) then
+        obj.alpha = originalAlpha
+    else
+        obj.alpha = 0.0
+    end
+end
+
+-- 退場
+if (obj.totalframe - (obj.track0 * obj.track1 * 2) < obj.frame and exit) then
+    if (math.floor(obj.frame / obj.track0) % 2 == 0) then
+        obj.alpha = 0.0
+    else
+        obj.alpha = originalAlpha
+    end
+end

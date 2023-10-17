@@ -2,6 +2,8 @@
 
 ![example](https://github.com/cmt1910/MomentEffect/assets/88577419/50e2b21b-7d04-4789-a6a7-943b7942ae0b)
 
+AviUtlで利用可能なスクリプトです。
+
 ## 一瞬キラ
 
 オブジェクトの登場時に任意のフレーム間、3色に単色化させるスクリプトです。

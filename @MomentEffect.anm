@@ -18,18 +18,22 @@ end
 --dialog:入場/chk,enter=1;退場/chk,exit=1;
 
 local originalAlpha = obj.alpha
-
-local originalAlpha = obj.alpha
 local isEnterBlinkFrame = enter == 1 and obj.frame <= (obj.track0 * obj.track1 * 2) - 1
 local isExitBlinkFrame = exit == 1 and obj.totalframe - (obj.track0 * obj.track1 * 2) < obj.frame
 local isEvenBlinkFrame = math.floor(obj.frame / obj.track0) % 2 == 0
 
 -- 入場時の点滅処理
 if isEnterBlinkFrame then
+    -- isEvenBlinkFrame が true の場合に 0.0 を obj.alpha に代入
+    -- false の場合に originalAlpha を obj.alpha に代入
     obj.alpha = isEvenBlinkFrame and originalAlpha or 0.0
 end
 
 -- 退場時の点滅処理
 if isExitBlinkFrame then
+    -- obj.totalframeが偶数の場合は点滅パターンを反転
+    if obj.totalframe % 2 == 0 then
+        isEvenBlinkFrame = not isEvenBlinkFrame
+    end
     obj.alpha = isEvenBlinkFrame and 0.0 or originalAlpha
 end

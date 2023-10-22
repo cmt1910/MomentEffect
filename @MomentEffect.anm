@@ -19,21 +19,17 @@ end
 
 local originalAlpha = obj.alpha
 
--- 入場
--- 指定した回数*2フレームの間だけ指定した間隔で点滅する
-if enter == 1 and obj.frame <= (obj.track0 * obj.track1 * 2) - 1 then
-    -- 点滅処理
-    if (math.floor(obj.frame / obj.track0) % 2 == 0) then
-        obj.alpha = originalAlpha
-    else
-        obj.alpha = 0.0
-    end
+local originalAlpha = obj.alpha
+local isEnterBlinkFrame = enter == 1 and obj.frame <= (obj.track0 * obj.track1 * 2) - 1
+local isExitBlinkFrame = exit == 1 and obj.totalframe - (obj.track0 * obj.track1 * 2) < obj.frame
+local isEvenBlinkFrame = math.floor(obj.frame / obj.track0) % 2 == 0
+
+-- 入場時の点滅処理
+if isEnterBlinkFrame then
+    obj.alpha = isEvenBlinkFrame and originalAlpha or 0.0
 end
--- 退場
-if exit == 1 and obj.totalframe - (obj.track0 * obj.track1 * 2) < obj.frame then
-    if (math.floor(obj.frame / obj.track0) % 2 == 0) then
-        obj.alpha = 0.0
-    else
-        obj.alpha = originalAlpha
-    end
+
+-- 退場時の点滅処理
+if isExitBlinkFrame then
+    obj.alpha = isEvenBlinkFrame and 0.0 or originalAlpha
 end

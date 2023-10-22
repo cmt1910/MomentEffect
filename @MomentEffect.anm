@@ -21,7 +21,7 @@ local originalAlpha = obj.alpha
 
 -- 入場
 -- 指定した回数*2フレームの間だけ指定した間隔で点滅する
-if (obj.frame <= (obj.track0 * obj.track1 * 2) - 1) then
+if enter == 1 and obj.frame <= (obj.track0 * obj.track1 * 2) - 1 then
     -- 点滅処理
     if (math.floor(obj.frame / obj.track0) % 2 == 0) then
         obj.alpha = originalAlpha
@@ -29,9 +29,8 @@ if (obj.frame <= (obj.track0 * obj.track1 * 2) - 1) then
         obj.alpha = 0.0
     end
 end
-
 -- 退場
-if (obj.totalframe - (obj.track0 * obj.track1 * 2) < obj.frame and exit) then
+if exit == 1 and obj.totalframe - (obj.track0 * obj.track1 * 2) < obj.frame then
     if (math.floor(obj.frame / obj.track0) % 2 == 0) then
         obj.alpha = 0.0
     else

@@ -15,22 +15,22 @@ end
 @一瞬ストロボ
 --track0:間隔ﾌﾚｰﾑ,1,100,1,1
 --track1:回数,1,100,1,1
---dialog:入場/chk,in=1;退場/chk,out=1;
+--dialog:入場/chk,enter=1;退場/chk,exit=1;
 
 local originalAlpha = obj.alpha
-local isInBlinkFrame = in == 1 and obj.frame <= (obj.track0 * blinkTimes * 2) - 1
-local isOutBlinkFrame = out == 1 and obj.totalframe - (obj.track0 * blinkTimes * 2) < obj.frame
+local isEnterBlinkFrame = enter == 1 and obj.frame <= (obj.track0 * blinkTimes * 2) - 1
+local isExitBlinkFrame = exit == 1 and obj.totalframe - (obj.track0 * blinkTimes * 2) < obj.frame
 local isEvenBlinkFrame = math.floor(obj.frame / obj.track0) % 2 == 0
 
 -- 入場時の点滅処理
-if isInBlinkFrame then
+if isEnterBlinkFrame then
     -- isEvenBlinkFrame が true の場合に 0.0 を obj.alpha に代入
     -- false の場合に originalAlpha を obj.alpha に代入
     obj.alpha = isEvenBlinkFrame and originalAlpha or 0.0
 end
 
 -- 退場時の点滅処理
-if isOutBlinkFrame then
+if isExitBlinkFrame then
     -- obj.totalframeが偶数の場合は点滅パターンを反転
     if obj.totalframe % 2 == 0 then
         isEvenBlinkFrame = not isEvenBlinkFrame
@@ -41,28 +41,28 @@ end
 @一瞬ストロボ(個別)
 --track0:間隔ﾌﾚｰﾑ,1,100,1,1
 --track1:回数,1,100,1,1
---dialog:入場/chk,in=1;入場逆順/chk,isInReverseOrder=0;退場/chk,out=1;退場逆順/chk,isOutReverseOrder=0;
+--dialog:入場/chk,enter=1;入場逆順/chk,enterReverseOrder=0;退場/chk,exit=1;退場逆順/chk,exitReverseOrder=0;
 
 local blinkTimes = (obj.index + 1) * obj.track1
 local originalAlpha = obj.alpha
 
-local isInBlinkFrame = in == 1 and obj.frame <= (obj.track0 * blinkTimes * 2) - 1
-local isOutBlinkFrame = out == 1 and obj.totalframe - (obj.track0 * blinkTimes * 2) < obj.frame
+local isEnterBlinkFrame = enter == 1 and obj.frame <= (obj.track0 * blinkTimes * 2) - 1
+local isExitBlinkFrame = exit == 1 and obj.totalframe - (obj.track0 * blinkTimes * 2) < obj.frame
 local isEvenBlinkFrame = math.floor(obj.frame / obj.track0) % 2 == 0
 
-local isInhiddenFrame = obj.frame < blinkTimes - obj.track1
-local isOuthiddenFrame = obj.totalframe - blinkTimes + obj.track1 < obj.frame
+local isEnterhiddenFrame = obj.frame < blinkTimes - obj.track1
+local isExithiddenFrame = obj.totalframe - blinkTimes + obj.track1 < obj.frame
 
 
 -- 入場時の点滅処理
-if isInBlinkFrame then
+if isEnterBlinkFrame then
     -- isEvenBlinkFrame が true の場合に 0.0 を obj.alpha に代入
     -- false の場合に originalAlpha を obj.alpha に代入
     obj.alpha = isEvenBlinkFrame and originalAlpha or 0.0
 end
 
 -- 退場時の点滅処理
-if isOutBlinkFrame then
+if isExitBlinkFrame then
     -- obj.totalframeが偶数の場合は点滅パターンを反転
     if obj.totalframe % 2 == 0 then
         isEvenBlinkFrame = not isEvenBlinkFrame

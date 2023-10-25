@@ -71,6 +71,10 @@ if isExitBlinkFrame then
 end
 
 -- 指定回数点滅してないものを非表示
-if isEnterhiddenFrame or isExithiddenFrame then
+if isEnterhiddenFrame and isEnterReverseOrder == 0 then
+    obj.alpha = 0.0
+end
+
+if isExithiddenFrame and isExitReverseOrder == 0 then
     obj.alpha = 0.0
 end

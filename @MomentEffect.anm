@@ -6,9 +6,9 @@
 
 if(obj.frame <= obj.track0-1) then
     obj.effect("単色化","強さ",100.0,"輝度を保持する",0,"color",color1) -- 色1に単色化
-elseif(obj.frame <= obj.track0 + obj.track1 - 1) then
+elseif(obj.frame <= obj.track0 + blinkTimes - 1) then
     obj.effect("単色化","強さ",100.0,"輝度を保持する",0,"color",color2) -- 色2に単色化
-elseif(obj.frame <= obj.track0 + obj.track1 + obj.track2 - 1) then
+elseif(obj.frame <= obj.track0 + blinkTimes + obj.track2 - 1) then
     obj.effect("単色化","強さ",100.0,"輝度を保持する",0,"color",color3) -- 色3に単色化
 end
 
@@ -18,8 +18,8 @@ end
 --dialog:入場/chk,enter=1;退場/chk,exit=1;
 
 local originalAlpha = obj.alpha
-local isEnterBlinkFrame = enter == 1 and obj.frame <= (obj.track0 * obj.track1 * 2) - 1
-local isExitBlinkFrame = exit == 1 and obj.totalframe - (obj.track0 * obj.track1 * 2) < obj.frame
+local isEnterBlinkFrame = enter == 1 and obj.frame <= (obj.track0 * blinkTimes * 2) - 1
+local isExitBlinkFrame = exit == 1 and obj.totalframe - (obj.track0 * blinkTimes * 2) < obj.frame
 local isEvenBlinkFrame = math.floor(obj.frame / obj.track0) % 2 == 0
 
 -- 入場時の点滅処理
@@ -36,4 +36,41 @@ if isExitBlinkFrame then
         isEvenBlinkFrame = not isEvenBlinkFrame
     end
     obj.alpha = isEvenBlinkFrame and 0.0 or originalAlpha
+end
+
+@一瞬ストロボ(個別)
+--track0:間隔ﾌﾚｰﾑ,1,100,1,1
+--track1:回数,1,100,1,1
+--dialog:入場/chk,enter=1;入場逆順/chk,enterReverseOrder=0;退場/chk,exit=1;退場逆順/chk,exitReverseOrder=0;
+
+local blinkTimes = (obj.index + 1) * obj.track1
+local originalAlpha = obj.alpha
+
+local isEnterBlinkFrame = enter == 1 and obj.frame <= (obj.track0 * blinkTimes * 2) - 1
+local isExitBlinkFrame = exit == 1 and obj.totalframe - (obj.track0 * blinkTimes * 2) < obj.frame
+local isEvenBlinkFrame = math.floor(obj.frame / obj.track0) % 2 == 0
+
+local isEnterhiddenFrame = obj.frame < blinkTimes - obj.track1
+local isExithiddenFrame = obj.totalframe - blinkTimes + obj.track1 < obj.frame
+
+
+-- 入場時の点滅処理
+if isEnterBlinkFrame then
+    -- isEvenBlinkFrame が true の場合に 0.0 を obj.alpha に代入
+    -- false の場合に originalAlpha を obj.alpha に代入
+    obj.alpha = isEvenBlinkFrame and originalAlpha or 0.0
+end
+
+-- 退場時の点滅処理
+if isExitBlinkFrame then
+    -- obj.totalframeが偶数の場合は点滅パターンを反転
+    if obj.totalframe % 2 == 0 then
+        isEvenBlinkFrame = not isEvenBlinkFrame
+    end
+    obj.alpha = isEvenBlinkFrame and 0.0 or originalAlpha
+end
+
+-- 指定回数点滅してないものを非表示
+if isEnterhiddenFrame or isExithiddenFrame then
+    obj.alpha = 0.0
 end
